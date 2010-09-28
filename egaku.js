@@ -99,8 +99,11 @@ Egaku.prototype = {
 					dWidth = dHeight;
 				}
 			}
-			element = tmpCanvas;
-			this.canvasCx.drawImage(element,dx, dy, dWidth, dHeight);
+			pSize = Math.sqrt(Math.pow(dWidth,2) + Math.pow(dHeight,2));
+			dx -= (pSize - dWidth)/2;		
+			dy -= (pSize - dHeight)/2;
+			dWidth = dHeight = pSize;
+			this.canvasCx.drawImage(tmpCanvas,dx, dy, dWidth, dHeight);
 			tmpCanvasContext.restore();
 			return;
 		}
