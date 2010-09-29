@@ -30,6 +30,16 @@ Egaku.prototype = {
 		canvasCx.stroke();
 		canvasCx.closePath();
 	},
+	preloadImages:function(imageList,callback){
+		egakuHandle = this;
+		egakuHandle.preloadImageFromUrl(imageList.pop(),function(){
+			if (imageList.length < 1){
+				callback();
+			}else{
+				egakuHandle.preloadImages(imageList,callback);
+			}
+		});
+	},
 	preloadImageFromUrl:function(imageUrl,callback){
 		if (typeof imageUrl == 'object'){
 			for (var keyName in imageUrl) break;
@@ -48,7 +58,7 @@ Egaku.prototype = {
 				if (typeof callback == 'function'){
 					callback();
 				}
-			});
+			},false);
 		}else{
 			if (typeof callback == 'function'){
 				callback();
@@ -64,7 +74,7 @@ Egaku.prototype = {
 			renderImage(imageList[this.imageName],dx, dy, dWidth, dHeight);
 		})
 	},
-	renderImage:function(element,dx,dy,dWidth,dHeight,degree,preserveAspecRatio){
+	renderImage:function(element,dx,dy,dWidth,dHeight,degree){
 		
 		if (typeof element == 'string'){
 			element = this.imageList[element];
@@ -90,15 +100,6 @@ Egaku.prototype = {
 			tmpCanvasContext.translate(-(element.width /2 ),-(element.height /2 ));
 			tmpCanvasContext.drawImage(element,0,0);
 
-			if (preserveAspecRatio){
-				if (dWidth>dHeight){
-					dy -= dWidth - dHeight;
-					dHeight = dWidth;
-				}else if (dHeight>dWidth){
-					dx -= dHeight - dWidth;
-					dWidth = dHeight;
-				}
-			}
 			pSize = Math.sqrt(Math.pow(dWidth,2) + Math.pow(dHeight,2));
 			dx -= (pSize - dWidth)/2;		
 			dy -= (pSize - dHeight)/2;
