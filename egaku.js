@@ -4,7 +4,6 @@ function Egaku(canvasId) {
 	this.imageList = Array();
 	this.width = this.canvasElement.width;
 	this.height = this.canvasElement.height;
-	this.tempCanvas = document.createElement('CANVAS');
 }
 Egaku.prototype = {
 	init:function(){
@@ -78,7 +77,6 @@ Egaku.prototype = {
 		
 		if (typeof element == 'string'){
 			element = this.imageList[element];
-			
 		}
 		if (!dHeight){
 			dHeight = element.height
@@ -87,25 +85,28 @@ Egaku.prototype = {
 			dWidth = element.width
 		}
 		if (degree){
-			tmpCanvas = this.tempCanvas;
-			tmpCanvasContext = tmpCanvas.getContext('2d');
-			tmpCanvasContext.save();
-			tmpCanvas.height = tmpCanvas.width = Math.sqrt(Math.pow(element.width,2) + Math.pow(element.height,2));
-			canvasCenter = tmpCanvas.height/2;
-			tmpCanvasContext.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
-			widthBuffer = tmpCanvas.width/2 -  element.width/2;
-			heightBuffer = tmpCanvas.height/2 -  element.height/2;
-			tmpCanvasContext.translate(element.width /2 + widthBuffer ,element.height /2 + heightBuffer);
-			tmpCanvasContext.rotate(degree * Math.PI / 180);
-			tmpCanvasContext.translate(-(element.width /2 ),-(element.height /2 ));
-			tmpCanvasContext.drawImage(element,0,0);
+			if (typeof this.tmpRotateCanvas == 'undefined'){
+				this.tmpRotateCanvas = document.createElement('CANVAS');
+			}
+			tmpRotateCanvas = this.tmpRotateCanvas;
+			tmpRotateCanvasContext = tmpRotateCanvas.getContext('2d');
+			tmpRotateCanvasContext.save();
+			tmpRotateCanvas.height = tmpRotateCanvas.width = Math.sqrt(Math.pow(element.width,2) + Math.pow(element.height,2));
+			canvasCenter = tmpRotateCanvas.height/2;
+			tmpRotateCanvasContext.clearRect(0, 0, tmpRotateCanvas.width, tmpRotateCanvas.height);
+			widthBuffer = tmpRotateCanvas.width/2 -  element.width/2;
+			heightBuffer = tmpRotateCanvas.height/2 -  element.height/2;
+			tmpRotateCanvasContext.translate(element.width /2 + widthBuffer ,element.height /2 + heightBuffer);
+			tmpRotateCanvasContext.rotate(degree * Math.PI / 180);
+			tmpRotateCanvasContext.translate(-(element.width /2 ),-(element.height /2 ));
+			tmpRotateCanvasContext.drawImage(element,0,0);
 
 			pSize = Math.sqrt(Math.pow(dWidth,2) + Math.pow(dHeight,2));
 			dx -= (pSize - dWidth)/2;		
 			dy -= (pSize - dHeight)/2;
 			dWidth = dHeight = pSize;
-			this.canvasCx.drawImage(tmpCanvas,dx, dy, dWidth, dHeight);
-			tmpCanvasContext.restore();
+			this.canvasCx.drawImage(tmpRotateCanvas,dx, dy, dWidth, dHeight);
+			tmpRotateCanvasContext.restore();
 			return;
 		}
 		this.canvasCx.drawImage(element,dx, dy, dWidth, dHeight);
@@ -116,3 +117,23 @@ Egaku.prototype = {
 	},
 	
 }
+
+function EgakuSprite(image,data){
+	;
+}
+
+EgakuSprite.prototype = {
+	next:function(){
+	
+	},
+	previous:function(){
+	
+	},
+	seek:function($number){
+	
+	},
+	play:function(timeout){
+	
+	},
+}
+
