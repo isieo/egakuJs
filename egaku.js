@@ -155,6 +155,7 @@ return (n + (n > 0 ? .5 : -.5)) << 0;
 
 
 function sqrooter(m){
+  return  Math.sqrt(m);
   var i=0;
   var x1;
   var x2;
