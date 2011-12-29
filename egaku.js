@@ -91,25 +91,36 @@ Egaku.prototype = {
 			tmpRotateCanvas = this.tmpRotateCanvas;
 			tmpRotateCanvasContext = tmpRotateCanvas.getContext('2d');
 			tmpRotateCanvasContext.save();
-			tmpRotateCanvas.height = tmpRotateCanvas.width = Math.sqrt(Math.pow(element.width,2) + Math.pow(element.height,2));
-			canvasCenter = tmpRotateCanvas.height/2;
+			if (element.canvasDimension == undefined
+			    && element.canvasCenter == undefined
+			    && element.canvasCenter == undefined
+			    
+			    ){
+			  element.canvasDimension = tmpRotateCanvas.height = tmpRotateCanvas.width = sqrooter((element.width*element.width) + (element.height*element.height));
+			  element.canvasCenter = canvasCenter = tmpRotateCanvas.height/2;
+			}else{
+			  tmpRotateCanvas.height = tmpRotateCanvas.width = element.canvasDimension;
+			  canvasCenter = element.canvasCenter
+			}
 			tmpRotateCanvasContext.clearRect(0, 0, tmpRotateCanvas.width, tmpRotateCanvas.height);
 			widthBuffer = tmpRotateCanvas.width/2 -  element.width/2;
 			heightBuffer = tmpRotateCanvas.height/2 -  element.height/2;
 			tmpRotateCanvasContext.translate(element.width /2 + widthBuffer ,element.height /2 + heightBuffer);
-			tmpRotateCanvasContext.rotate(degree * Math.PI / 180);
+			tmpRotateCanvasContext.rotate(degree * (22/7)/ 180);
 			tmpRotateCanvasContext.translate(-(element.width /2 ),-(element.height /2 ));
 			tmpRotateCanvasContext.drawImage(element,0,0);
 
-			pSize = Math.sqrt(Math.pow(dWidth,2) + Math.pow(dHeight,2));
+			pSize = sqrooter((dWidth*dWidth) + (dHeight*dHeight));
 			dx -= (pSize - dWidth)/2;		
 			dy -= (pSize - dHeight)/2;
+			
+			
 			dWidth = dHeight = pSize;
-			this.canvasCx.drawImage(tmpRotateCanvas,dx, dy, dWidth, dHeight);
+			this.canvasCx.drawImage(tmpRotateCanvas,rounder(dx), rounder(dy), dWidth, dHeight);
 			tmpRotateCanvasContext.restore();
 			return;
 		}
-		this.canvasCx.drawImage(element,dx, dy, dWidth, dHeight);
+		this.canvasCx.drawImage(element,rounder(dx), rounder(dy), dWidth, dHeight);
 
 	},
 	imageElement:function(imageName){
@@ -137,3 +148,26 @@ EgakuSprite.prototype = {
 	},
 }
 
+
+function rounder(n){
+return (n + (n > 0 ? .5 : -.5)) << 0;
+}
+
+
+function sqrooter(m){
+  var i=0;
+  var x1;
+  var x2;
+  while( (i*i) <= m ) {
+    i = i + 0.1;
+  }
+  x1 = i;
+  for(j=0;j<10;j++){
+      x2=m;
+      x2/=x1;
+      x2+=x1;
+      x2/=2;
+      x1=x2;
+   }
+   return x2;
+}
